@@ -19,8 +19,9 @@ class ApplicationController < Sinatra::Base
     if @user
       # line 18, is where the session is being created if the @user that comes from our helpers.rb, exists.
       session[:user_id] = @user.id
+      
       redirect to '/account'
-      erb :account
+      
     else
       erb :error 
     end
@@ -28,7 +29,12 @@ class ApplicationController < Sinatra::Base
   end
 
   get '/account' do
-    erb :account
+    @current_user = User.find_by_id(session[:user_id])
+    if @current_user
+      erb :account
+    else
+      erb :error
+    end
   end
 
   get '/logout' do
